@@ -1,4 +1,5 @@
 let L = 'en';
+const WALLET = "0x6Ac89E8Ff9f98313900B262D0B980b632209Fa09";
 
 function setL(lang, btn) {
   L = lang;
@@ -64,28 +65,22 @@ function updD() {
 function calc() {
   let c = parseInt(document.getElementById('cnt').value) || 5;
   highlightPreset(c);
-
   if (c === 3) {
     document.getElementById('prc').textContent = "$0.00 (FREE)";
     return;
   }
-  if (c < 5) c = 5;
-  if (c > 200) c = 200;
-
-  let usd = 1.50;
-  if (c > 10) usd = 1.50 + (c - 10) * 0.05;
+  c = Math.min(200, Math.max(5, c));
+  let usd = c > 10 ? 1.50 + (c - 10) * 0.05 : 1.50;
   document.getElementById('prc').textContent = "$" + usd.toFixed(2);
 }
 
 function prep() {
   let c = parseInt(document.getElementById('cnt').value) || 5;
-  if (c !== 3 && c < 5) {
-    c = 5;
-    document.getElementById('cnt').value = 5;
-    calc();
-  }
+  if (c !== 3 && c < 5) { c = 5; document.getElementById('cnt').value = 5; calc(); }
   document.getElementById('res').style.display = 'block';
   document.getElementById('out').style.display = 'none';
+  const oldBox = document.getElementById('crypto-box');
+  if (oldBox) oldBox.remove();
 
   if (c === 3) {
     document.getElementById('pay-note').textContent = T[L].freeNote;
@@ -98,8 +93,25 @@ function prep() {
   }
 }
 
+function copyW() {
+  navigator.clipboard.writeText(WALLET);
+  alert(L === 'ru' ? 'Адрес кошелька скопирован!' : 'Wallet address copied!');
+}
+
 function pay() {
-  alert(L === 'ru' ? 'Тестовая оплата прошла успешно! Нажмите зеленую кнопку ниже.' : 'Test payment successful! Click the green button below.');
+  const priceTxt = document.getElementById('prc').textContent;
+  let cBox = document.getElementById('crypto-box');
+  if (!cBox) {
+    cBox = document.createElement('div');
+    cBox.id = 'crypto-box';
+    cBox.style.cssText = 'background:#161922;border:1px solid #d4af37;padding:15px;border-radius:8px;margin:15px 0;font-size:14px';
+    document.getElementById('pay-row').after(cBox);
+  }
+  const title = L === 'ru' ? 'Переведите ' + priceTxt + ' в USDT (сеть Polygon / BEP20 / Arbitrum):' : 'Send ' + priceTxt + ' in USDT (Polygon / BEP20 / Arbitrum network):';
+  const btnTxt = L === 'ru' ? '📋 Скопировать адрес' : '📋 Copy Address';
+  cBox.innerHTML = '<div style="margin-bottom:8px;color:#d4af37;font-weight:bold">' + title + '</div>' +
+    '<div style="word-break:break-all;font-family:monospace;background:#212533;padding:8px;border-radius:4px;margin-bottom:10px">' + WALLET + '</div>' +
+    '<button class="p-btn" onclick="copyW()">' + btnTxt + '</button>';
   document.getElementById('dl').style.display = 'inline-block';
 }
 
@@ -127,7 +139,6 @@ function gen() {
 
   let pool = new Array();
   for (let i = 0; i < favs.length; i++) pool.push(favs.at(i));
-
   let ps = s === 'wheeling' ? Math.min(m, p * 3) : m;
   while (pool.length < ps) {
     let r = Math.floor(Math.random() * m) + 1;
@@ -140,7 +151,6 @@ function gen() {
   lines.push('--------------------------------------------------');
 
   let anchor = pool.at(0);
-
   for (let i = 1; i <= c; i++) {
     let t = new Array();
     let attempts = 0;
@@ -164,14 +174,11 @@ function gen() {
       attempts++;
     }
     t.sort(function(a, b) { return a - b; });
-
     let str = d.txtTicket + ' #' + i + ':  ' + t.join(' - ');
     if (b > 0) {
-      if (bCount === 1) {
-        str += '  + (' + ((i % b) || b) + ')';
-      } else {
-        let b1 = (i % b) || b;
-        let b2 = ((i + 3) % b) || b;
+      if (bCount === 1) str += '  + (' + ((i % b) || b) + ')';
+      else {
+        let b1 = (i % b) || b, b2 = ((i + 3) % b) || b;
         if (b1 === b2) b2 = (b1 % b) + 1;
         str += '  + (' + b1 + ', ' + b2 + ')';
       }
@@ -195,13 +202,7 @@ function openM(type) {
   document.getElementById('m-body').textContent = type === 'terms' ? T[L].mTerms : T[L].mPriv;
   document.getElementById('modal').style.display = 'flex';
 }
-
-function closeM() {
-  document.getElementById('modal').style.display = 'none';
-}
-
-function hideC() {
-  document.getElementById('cookie').style.display = 'none';
-}
+function closeM() { document.getElementById('modal').style.display = 'none'; }
+function hideC() { document.getElementById('cookie').style.display = 'none'; }
 
 setL('en', document.querySelector('.l-btn'));
