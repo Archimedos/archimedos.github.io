@@ -1,5 +1,9 @@
 let L = 'en';
 const WALLET = "0x6Ac89E8Ff9f98313900B262D0B980b632209Fa09";
+const CONTACTS_TEXT = {
+  en: "CONTACTS & CUSTOMER SUPPORT\n\nFor technical inquiries, payment verification, or partnership questions, please contact us via:\n\n• Email: segizmund1@yahoo.com\n• Telegram Support: @Willy\n\nAverage response time: within 12–24 hours.",
+  ru: "КОНТАКТЫ И ПОДДЕРЖКА\n\nПо техническим вопросам, проверке платежей или сотрудничеству свяжитесь с нами:\n\n• Электронная почта: segizmund1@yahoo.com\n• Telegram поддержка: @Willy\n\nСреднее время ответа: 12–24 часа."
+};
 
 function setL(lang, btn) {
   L = lang;
@@ -33,6 +37,7 @@ function setL(lang, btn) {
   document.getElementById('t-warn-p').textContent = d.warnP;
   document.getElementById('t-terms').textContent = d.terms;
   document.getElementById('t-priv').textContent = d.priv;
+  document.getElementById('t-cont').textContent = L === 'ru' ? 'Контакты' : 'Contacts';
   document.getElementById('t-cook').textContent = d.cook;
 
   document.getElementById('t-can-list').innerHTML = d.can.map(x => '<li>' + x + '</li>').join('');
@@ -51,10 +56,7 @@ function highlightPreset(val) {
   }
 }
 
-function setC(num) {
-  document.getElementById('cnt').value = num;
-  calc();
-}
+function setC(num) { document.getElementById('cnt').value = num; calc(); }
 
 function updD() {
   const s = document.getElementById('sch').value;
@@ -65,10 +67,7 @@ function updD() {
 function calc() {
   let c = parseInt(document.getElementById('cnt').value) || 5;
   highlightPreset(c);
-  if (c === 3) {
-    document.getElementById('prc').textContent = "$0.00 (FREE)";
-    return;
-  }
+  if (c === 3) { document.getElementById('prc').textContent = "$0.00 (FREE)"; return; }
   c = Math.min(200, Math.max(5, c));
   let usd = c > 10 ? 1.50 + (c - 10) * 0.05 : 1.50;
   document.getElementById('prc').textContent = "$" + usd.toFixed(2);
@@ -87,7 +86,7 @@ function prep() {
     document.getElementById('pay-row').style.display = 'none';
     document.getElementById('dl').style.display = 'inline-block';
   } else {
-    document.getElementById('pay-note').textContent = T[L].payNote;
+    document.getElementById('pay-note').textContent = L === 'ru' ? 'Нажмите кнопку ниже для получения реквизитов оплаты:' : 'Click below to view payment details:';
     document.getElementById('pay-row').style.display = 'flex';
     document.getElementById('dl').style.display = 'none';
   }
@@ -198,8 +197,13 @@ function gen() {
 }
 
 function openM(type) {
-  document.getElementById('m-title').textContent = type === 'terms' ? T[L].terms : T[L].priv;
-  document.getElementById('m-body').textContent = type === 'terms' ? T[L].mTerms : T[L].mPriv;
+  if (type === 'contacts') {
+    document.getElementById('m-title').textContent = L === 'ru' ? 'Контакты' : 'Contacts';
+    document.getElementById('m-body').textContent = L === 'ru' ? CONTACTS_TEXT.ru : CONTACTS_TEXT.en;
+  } else {
+    document.getElementById('m-title').textContent = type === 'terms' ? T[L].terms : T[L].priv;
+    document.getElementById('m-body').textContent = type === 'terms' ? T[L].mTerms : T[L].mPriv;
+  }
   document.getElementById('modal').style.display = 'flex';
 }
 function closeM() { document.getElementById('modal').style.display = 'none'; }
