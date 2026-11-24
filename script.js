@@ -1,8 +1,8 @@
 let L = 'en';
 const WALLET = "0x6Ac89E8Ff9f98313900B262D0B980b632209Fa09";
 const CONTACTS_TEXT = {
-  en: "CONTACTS & CUSTOMER SUPPORT\n\nFor technical inquiries, payment verification, or partnership questions, please contact us via:\n\n• Email: segizmund1@yahoo.com\n• Telegram Support: @Willy\n\nAverage response time: within 12–24 hours.",
-  ru: "КОНТАКТЫ И ПОДДЕРЖКА\n\nПо техническим вопросам, проверке платежей или сотрудничеству свяжитесь с нами:\n\n• Электронная почта: segizmund1@yahoo.com\n• Telegram поддержка: @Willy\n\nСреднее время ответа: 12–24 часа."
+  en: "CONTACTS & CUSTOMER SUPPORT\n\nFor technical inquiries, payment verification, or partnership questions, please contact us via:\n\n• Email: segizmund1@yahoo.com\n• Telegram Support: @Willy_8\n\nAverage response time: within 12–24 hours.",
+  ru: "КОНТАКТЫ И ПОДДЕРЖКА\n\nПо техническим вопросам, проверке платежей или сотрудничеству свяжитесь с нами:\n\n• Электронная почта: segizmund1@yahoo.com\n• Telegram поддержка: @Willy_8\n\nСреднее время ответа: 12–24 часа."
 };
 
 function setL(lang, btn) {
