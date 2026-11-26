@@ -103,14 +103,16 @@ function pay() {
   if (!cBox) {
     cBox = document.createElement('div');
     cBox.id = 'crypto-box';
-    cBox.style.cssText = 'background:#161922;border:1px solid #d4af37;padding:15px;border-radius:8px;margin:15px 0;font-size:14px';
+    cBox.style.cssText = 'background:#161922;border:1px solid #d4af37;padding:15px;border-radius:8px;margin:15px 0;font-size:14px;display:flex;gap:15px;align-items:center;flex-wrap:wrap';
     document.getElementById('pay-row').after(cBox);
   }
   const title = L === 'ru' ? 'Переведите ' + priceTxt + ' в USDT (сеть Polygon / BEP20 / Arbitrum):' : 'Send ' + priceTxt + ' in USDT (Polygon / BEP20 / Arbitrum network):';
   const btnTxt = L === 'ru' ? '📋 Скопировать адрес' : '📋 Copy Address';
-  cBox.innerHTML = '<div style="margin-bottom:8px;color:#d4af37;font-weight:bold">' + title + '</div>' +
+  const qrUrl = 'https://qrserver.com' + WALLET;
+  cBox.innerHTML = '<img src="' + qrUrl + '" alt="QR" style="border-radius:6px;border:3px solid #fff;width:130px;height:130px">' +
+    '<div style="flex:1;min-width:200px"><div style="margin-bottom:8px;color:#d4af37;font-weight:bold">' + title + '</div>' +
     '<div style="word-break:break-all;font-family:monospace;background:#212533;padding:8px;border-radius:4px;margin-bottom:10px">' + WALLET + '</div>' +
-    '<button class="p-btn" onclick="copyW()">' + btnTxt + '</button>';
+    '<button class="p-btn" onclick="copyW()">' + btnTxt + '</button></div>';
   document.getElementById('dl').style.display = 'inline-block';
 }
 
